@@ -1,0 +1,61 @@
+File Transfer Protocol:-
+ftp server is used to transfer files between server and clients. All major operating systems support ftp.
+The vsftpd rpm is required to configure ftp server in RHEL. Once it is installed, you can start the service as a root user.
+
+Install vsftp(server daemon) and ftp(client) tools:
+yum install vsftpd.x86_64 ftp.x86_64 -y
+Check if selinux is enabled if yes, disable the same
+getenforce
+setenforce 0
+or
+vi /etc/selinux/config
+     SELINUX=disabled
+-->Enable vsftpd daemon to start automatically along with server boot or reboot
+  systemctl is-enabled vsftpd
+  systemctl enable vsftpd
+  systemctl start vsftpd
+  systemctl status vsftpd
+  firewall-cmd --zone=public --add-service=ftp --permanent
+  firewall-cmd --reload
+  firewall-cmd --zone=public --list-all
+verify if the port is listening
+  ss -an or ss -a
+  or netstat -ntlp 
+  or netstat -ntl
+
+commonly used ftp commands:-
+put : transfer file local to remote server (upload)
+mput : transfter more than one file form local to remote server
+get : transfter file from remote server to local (download)
+mget : transfter more than one file from remote server to local
+prompt : to on or off the yes or no prompt
+bin : transfter in binary mode
+ascii : tranfter the file in ascii mode ( clear text format, which is not best practice)
+!cmd, where cmd is command (you can see all supported commands by typing help): command issued on local server ex:- !ls : files are listed locally
+cd : to change directory
+lcd : to change local directory
+hash: Hash( #) symbols are printed while transferring the data.
+help or ? : to print list of supported ftp commands.
+open or open ip : used to open the connection
+close: Close the connection
+bye or quit : exit from ftp 
+mkdir : create a directory on remote system
+rmdir : remove a directory on remote system
+delete : delete given file on the remote system
+ls: list files in the remote system
+pwd: print working directory on remote system.
+
+Noe:- we worked accessing ftp from the browser and winscp tool from windows client. please do practice the same.
+Note:- 
+-->By default, root account is disabled for to use vsftpd service. So root can not login (this is due to security reasons)
+-->/etc/vsftpd/ftpuser is the file where you enter list of users(one line per user), so that those users will not get access to ftp.
+-->/etc/vsftpd/user-list is the file for whose username are entered into this file are also not allowed to loign from ftp and even they are not prompted for passwords.
+
+Ananymous ftp login:- To login anonymous, username is anonymous and the password is an email address entered(email id is not validated, so, you can provide any email id such as any@any.com) to get the access.
+To disable the anonymous access change below directives in /etc/vsftpd/vsftpd.conf file
+anonymous_enable=NO
+
+
+
+
+
